@@ -10,6 +10,7 @@ export default class MyComponent extends Component {
     message: "",
     username: "",
     isValid: false,
+    messageArr: ["Angular", "React", "Vue", "Ember"],
   };
   //Event Handler
   handleDecrement = () => this.setState({ value: this.state.value - 1 });
@@ -21,9 +22,11 @@ export default class MyComponent extends Component {
   };
 
   handleEnter = (e) => {
+    const { message, messageArr } = this.state;
     if (e.keyCode === 13) {
       this.setState({
         isValid: true,
+        messageArr: [...messageArr, message],
         message: "",
       });
       this.myUsername.focus();
@@ -39,8 +42,9 @@ export default class MyComponent extends Component {
   render() {
     //destructuring assignment
     const { name, age } = this.props;
-    const { value, message, username, isValid } = this.state;
+    const { value, message, username, isValid, messageArr } = this.state;
     const { handleDecrement, handleChange, handleEnter } = this;
+    const messageList = messageArr.map((msg, idx) => <li key={idx}>{msg}</li>);
 
     return (
       <div>
@@ -62,6 +66,7 @@ export default class MyComponent extends Component {
           onKeyDown={handleEnter}
         ></input>
         <br />
+        <ul>{messageList}</ul>
         <p>State username의 값 = {username}</p>
         <input
           name="username"
