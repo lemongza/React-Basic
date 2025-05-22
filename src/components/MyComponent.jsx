@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import "./MyComponent.css";
 
 //rcc
 export default class MyComponent extends Component {
@@ -8,14 +9,25 @@ export default class MyComponent extends Component {
     value: 0,
     message: "",
     username: "",
+    isValid: false,
   };
   //Event Handler
   handleDecrement = () => this.setState({ value: this.state.value - 1 });
-  
+
   handleChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value, //변수이름 동적으로 처리 [e.target.name] name=> message, username
     });
+  };
+
+  handleEnter = (e) => {
+    if (e.keyCode === 13) {
+      this.setState({
+        isValid: true,
+        message: "",
+      });
+      this.myUsername.focus();
+    }
   };
 
   //Event Handler 2
@@ -27,8 +39,8 @@ export default class MyComponent extends Component {
   render() {
     //destructuring assignment
     const { name, age } = this.props;
-    const { value, message, username } = this.state;
-    const { handleDecrement, handleChange } = this;
+    const { value, message, username, isValid } = this.state;
+    const { handleDecrement, handleChange, handleEnter } = this;
 
     return (
       <div>
@@ -43,10 +55,21 @@ export default class MyComponent extends Component {
         <button onClick={handleDecrement}>감소</button>
         <br />
         <p>State message의 값 = {message}</p>
-        <input name="message" value={message} onChange={handleChange}></input>
+        <input
+          name="message"
+          value={message}
+          onChange={handleChange}
+          onKeyDown={handleEnter}
+        ></input>
         <br />
         <p>State username의 값 = {username}</p>
-        <input name="username" value={username} onChange={handleChange}></input>
+        <input
+          name="username"
+          value={username}
+          onChange={handleChange}
+          className={isValid ? "success" : "failure"}
+          ref={(ref) => (this.myUsername = ref)}
+        />
       </div>
     );
   }
